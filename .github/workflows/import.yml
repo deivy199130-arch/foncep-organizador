@@ -1,0 +1,44 @@
+name: Migrar aplicación
+on:
+  push:
+    paths: ['.github/workflows/import.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Recuperar fuentes publicadas una sola vez
+        shell: python
+        run: |
+          from pathlib import Path
+          from urllib.request import urlopen, Request
+          base = 'https://foncep-documentos-local.quietcream8.chatgpt.site/'
+          folder = Path('dist')
+          folder.mkdir(exist_ok=True)
+          for name in ['index.html', 'styles.css', 'app.js', 'core.js', 'ocr.js', 'analyze.js']:
+              req = Request(base + name, headers={'User-Agent': 'FONCEP-Migration/1.0'})
+              with urlopen(req, timeout=60) as response:
+                  data = response.read()
+              text = data.decode('utf-8')
+              assert len(data) > 500, name + ' incompleto'
+              if name.endswith('.js'):
+                  assert '<html' not in text.lower(), name + ': respuesta HTML'
+              if name == 'index.html':
+                  assert 'FONCEP' in text and 'app.js' in text, 'Página incorrecta'
+              (folder / name).write_bytes(data)
+              print(name, len(data), 'bytes')
+      - run: npm install --ignore-scripts --no-audit --no-fund
+      - run: npm run build && npm test
+      - name: Guardar aplicación independiente en el repositorio
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add dist/index.html dist/styles.css dist/app.js dist/core.js dist/ocr.js dist/analyze.js package-lock.json
+          git diff --cached --quiet || git commit -m 'Migrar fuentes completas y fijar dependencias'
+          git push
