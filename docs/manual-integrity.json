@@ -1,93 +1,100 @@
 {
-  "application_commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+  "application_commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
   "source_files": [
     {
       "path": "dist/index.html",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
-      "sha256": "047b5edce8fc309ddfa43bcf63c4da86f1b6c731d81197c855c790f2e2e11f7b",
-      "bytes": 8466,
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
+      "sha256": "6862721175d21886064e7874761d7a5b630cad9414c97ac6a94e2d473f9afcb5",
+      "bytes": 8225,
       "lines": 10
     },
     {
       "path": "dist/styles.css",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
       "sha256": "6873143bd8e8deac7a2a13b08245c3a122bad96a04554e32452980a48092a94d",
       "bytes": 5797,
       "lines": 3
     },
     {
       "path": "dist/app.js",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
-      "sha256": "bf81a3b4dd7760f95c36583c2e305769ce14da49314382ad49c226e6b0883591",
-      "bytes": 29121,
-      "lines": 68
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
+      "sha256": "e267b8106c9d534cf380e6076c11a8e4ce1e467a9c323a2896bc17ca2285e038",
+      "bytes": 29689,
+      "lines": 72
     },
     {
       "path": "dist/core.js",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
       "sha256": "8d3c0e4f08f94d515a91b46049b10650bfe9e25483c1b4f493480e614ca53520",
       "bytes": 1993,
       "lines": 8
     },
     {
       "path": "dist/ocr.js",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
       "sha256": "1f2765305938c49c76d07e1cdd4ba0ff015e323a0abeaf7483d8ac5b1f9713c2",
       "bytes": 1548,
       "lines": 17
     },
     {
       "path": "dist/analyze.js",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
       "sha256": "389d769a63ecf56400bbcc819277c8512bd5e605dd6e7bc09bb1a7538194c601",
       "bytes": 7224,
       "lines": 41
     },
     {
+      "path": "dist/catalog.js",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
+      "sha256": "87e3f6581a227f9ec7973ff27a33572219c68c52226da3de2f89a2c6830538b4",
+      "bytes": 1993,
+      "lines": 84
+    },
+    {
       "path": "build.cjs",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
       "sha256": "686fc89e77638dc6c264668abc8f67c54a2c9c991f45cd36ee8c6ba55f6da991",
       "bytes": 1673,
       "lines": 24
     },
     {
       "path": "verify.cjs",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
-      "sha256": "ddcbbfec6933b40e13789c172bd16c3119b0c37ca46ae119d54a2e7f2ca73c23",
-      "bytes": 728,
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
+      "sha256": "39bc093660dd494cff6f7a62f3e640f833e60b5c280d2e7c8ccdf14bc10a26b8",
+      "bytes": 741,
       "lines": 5
     },
     {
       "path": "package.json",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
       "sha256": "b381d701655c8795064095ed31873099e92098722ede0af48d252dcd3cbee843",
       "bytes": 371,
       "lines": 18
     },
     {
       "path": ".github/workflows/pages.yml",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
       "sha256": "a846c6f4c94f6b530a2bc1b8b0b5e9d7ff088ca929f9ee040e830abf06bfa55e",
       "bytes": 1002,
       "lines": 44
     },
     {
       "path": ".gitignore",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
       "sha256": "e7f3dc01c24514310d6f92fd4e1fde2f09afebfdbdc838d72af480871e04b3b4",
       "bytes": 42,
       "lines": 3
     },
     {
       "path": "README.md",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
       "sha256": "6e1c74c9befb9033cb9d9075212904ada8053d2160a9541d002f0fc0ee516ece",
       "bytes": 1621,
       "lines": 25
     },
     {
       "path": "package-lock.json",
-      "commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+      "commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
       "sha256": "4303eb35d012460365a28a94c511978cec10bbc8eac43de902b03436e8118bbe",
       "bytes": 39700,
       "lines": 1056
@@ -100,7 +107,7 @@
       "lines": 44
     }
   ],
-  "code_paragraphs": 1380,
-  "docx_sha256": "dbc2249800ce86c1ae93d7de6217627502619b1be3d9ef63a2661087744005eb",
+  "code_paragraphs": 1469,
+  "docx_sha256": "ed7c6a308fa1983c4f7a4170ef1a2fcf2e0510752e065bbc315dbf670e377184",
   "validation": "DOCX/XML valid; all code paragraphs match Git verbatim"
 }
