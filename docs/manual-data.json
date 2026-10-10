@@ -1,0 +1,777 @@
+{
+  "title": "Organizador documental FONCEP",
+  "subtitle": "Informe de implementación, guía de uso, privacidad y código completo",
+  "date": "10 de octubre de 2026",
+  "source_commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+  "chapters": [
+    {
+      "title": "1. Qué se construyó y qué versión documenta este informe",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Se construyó una aplicación web para organizar expedientes PDF de la Gerencia de Bonos y Cuotas Partes: leer un catálogo Excel o CSV, proponer documentos por rangos de páginas, revisar una llave y un tipo documental, y generar un ZIP con subcarpetas por llave y PDF renombrados. Es una herramienta de apoyo a la organización; la decisión final sobre clasificación y correspondencia pertenece a quien revisa el expediente."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Aplicación: https://deivy199130-arch.github.io/foncep-organizador/ . Repositorio: https://github.com/deivy199130-arch/foncep-organizador . Fecha de elaboración: 10 de octubre de 2026. Versión de código examinada: 56c3d3351c05dec873ad03a79229c55810fc8af2."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El informe distingue las actuaciones realizadas, las funciones presentes en el código y las comprobaciones efectivamente ejecutadas. No equivale a una certificación de seguridad ni a una auditoría archivística o jurídica. Tampoco implica que ya se hayan organizado todos los expedientes reales de la carpeta original."
+        },
+        {
+          "kind": "paragraph",
+          "text": "En tu solicitud aparece «CR». Este documento lo interpreta como OCR, reconocimiento óptico de caracteres. Si te referías a otra herramienta, esa parte necesitaría una aclaración."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El anexo contiene íntegramente los archivos propios de la versión web publicada, sin sustituirlos por pseudocódigo. Incluye además el archivo de dependencias generado y el flujo temporal de migración recuperado del historial. Las bibliotecas de terceros se identifican con su versión y procedencia; no se atribuye su autoría al desarrollo de esta aplicación. Los prototipos locales anteriores no incluidos en este repositorio no se presentan como si fueran el código de la página actual."
+        }
+      ]
+    },
+    {
+      "title": "2. Paso a paso de la implementación realizada",
+      "blocks": [
+        {
+          "kind": "steps",
+          "items": [
+            "Definir la necesidad: separar actuaciones dentro de expedientes, agrupar por llave ciudadano–entidad y usar los nombres del catálogo oficial. Se tomó la carpeta de Windows/OneDrive que indicaste como ubicación de trabajo prevista, sin asumir que podía instalarse remotamente en tu PC.",
+            "Adaptar la solución al acceso desde el celular: desarrollar una página que se ejecuta en Edge o Chrome, sin exigir una instalación de escritorio para utilizarla. Se conservaron copias preparadas para uso independiente en OneDrive durante las etapas anteriores.",
+            "Crear la interfaz en español con cuatro pasos: Catálogo, Expedientes, Revisión y Descargar. Se escribieron HTML para la estructura, CSS para la presentación y JavaScript para el comportamiento.",
+            "Incorporar el catálogo: leer XLSX, XLS o CSV; mostrar las hojas y columnas; permitir indicar desde qué fila empiezan los tipos documentales; eliminar nombres repetidos y exigir un tipo del catálogo antes de aprobar.",
+            "Incorporar lectura y vista previa de PDF: cargar sus bytes en memoria, contar páginas, calcular SHA-256, evitar cargar dos veces un original idéntico y mostrar las páginas con PDF.js.",
+            "Crear el plan de documentos: cada fila guarda original, llave, tipo documental, páginas inicial y final, consecutivo, observación y aprobación. Cualquier cambio sustantivo obliga a revisar de nuevo.",
+            "Añadir OCR en español: renderizar una página del PDF como imagen y reconocer su texto con Tesseract.js. Se configuraron el trabajador, el motor WebAssembly y el modelo español para cargarse desde la misma aplicación.",
+            "Añadir análisis automático conservador: buscar encabezados, números de actuaciones y señales de continuidad; proponer cortes y tipos del catálogo; dejar llaves pendientes cuando no hay identificación inequívoca. Ninguna propuesta se aprueba automáticamente.",
+            "Crear la salida: copiar los rangos aprobados a nuevos PDF, nombrarlos TipoDocumental_Consecutivo.pdf, ubicarlos bajo la carpeta de la llave y construir un ZIP con informes de control.",
+            "Agregar guardado y recuperación del plan en JSON. Para recuperarlo se vuelven a cargar los originales y se comparan sus huellas SHA-256; las aprobaciones se reinician para exigir una revisión actual.",
+            "Preparar y publicar una primera versión en el alojamiento de Sites. Esa fase sirvió como origen de la transferencia posterior; la página de GitHub ya no necesita ese alojamiento para funcionar.",
+            "Recibir el repositorio que creaste: deivy199130-arch/foncep-organizador. Inicializarlo con un README y, después de que habilitaras el acceso de la integración, cargar configuración, compilación y publicación.",
+            "Ante el fallo de arranque del entorno de archivos, ejecutar en GitHub una migración de una sola vez: descargar los seis archivos públicos de la versión publicada, comprobarlos, fijar dependencias y guardarlos en el repositorio. No se transfirieron expedientes reales mediante esa tarea.",
+            "Eliminar el flujo temporal de importación. Las publicaciones posteriores usan los archivos propios del repositorio y los paquetes fijados en package-lock.json.",
+            "Intentar habilitar GitHub Pages automáticamente. GitHub rechazó esa habilitación por permisos de la integración; por eso seleccionaste GitHub Actions como fuente en Settings → Pages.",
+            "Reejecutar la tarea fallida después de tu confirmación. La compilación, las verificaciones y el despliegue terminaron con resultado success. El registro de publicación es https://github.com/deivy199130-arch/foncep-organizador/actions/runs/38093922198 .",
+            "Preparar este informe y su anexo completo de código a partir de la versión fijada, para que la explicación pueda contrastarse con los archivos reales."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "No se instaló una aplicación en tu Windows 11 a distancia ni se configuraron remotamente marcadores de Chrome o Edge. La publicación permite abrir la URL desde un navegador; guardarla como favorito sigue siendo una acción del usuario en su dispositivo."
+        }
+      ]
+    },
+    {
+      "title": "3. Cómo funciona GitHub y cómo se integra con la página",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Git es el sistema que registra versiones de los archivos. GitHub es el servicio donde se conserva y administra el repositorio. GitHub Actions ejecuta las tareas de preparación y comprobación. GitHub Pages publica el resultado como sitio estático. En esta aplicación son cuatro piezas relacionadas, con funciones distintas."
+        },
+        {
+          "kind": "table",
+          "headers": [
+            "Concepto",
+            "Qué significa",
+            "Uso en FONCEP"
+          ],
+          "rows": [
+            [
+              "Repositorio",
+              "Carpeta de código con historial.",
+              "Guarda HTML, CSS, JavaScript, configuración y documentación."
+            ],
+            [
+              "Commit",
+              "Versión identificada por una huella.",
+              "Permite conocer qué archivos cambiaron y recuperar una versión."
+            ],
+            [
+              "Rama main",
+              "Línea principal de desarrollo.",
+              "Es la fuente del flujo de publicación."
+            ],
+            [
+              "Actions",
+              "Tareas automáticas definidas en YAML.",
+              "Instala dependencias, genera dist, comprueba y publica."
+            ],
+            [
+              "Artifact",
+              "Paquete producido por una tarea.",
+              "Contiene los archivos estáticos listos para Pages."
+            ],
+            [
+              "Pages",
+              "Alojamiento de HTML, CSS y JavaScript.",
+              "Entrega la aplicación al navegador por HTTPS."
+            ],
+            [
+              "GITHUB_TOKEN",
+              "Credencial temporal de una tarea.",
+              "Autoriza las operaciones declaradas; no se incorpora al JavaScript de la página."
+            ],
+            [
+              "package-lock.json",
+              "Registro exacto de paquetes e integridad.",
+              "Hace repetible la instalación de las dependencias."
+            ]
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "La secuencia técnica es: cambio en main → Actions obtiene el código → Node.js 22 ejecuta npm ci → build.cjs copia bibliotecas y OCR a dist/vendor → npm test comprueba la distribución → se sube el artifact → Pages publica → tu navegador descarga la aplicación → los expedientes se procesan en tu dispositivo."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El flujo permanente está en .github/workflows/pages.yml. Puede comenzar por un cambio en main o por ejecución manual. Usa actions/checkout@v4, actions/setup-node@v4, actions/configure-pages@v5, actions/upload-pages-artifact@v3 y actions/deploy-pages@v4. Sus permisos incluyen lectura de código, escritura de Pages e identidad de despliegue."
+        },
+        {
+          "kind": "paragraph",
+          "text": "La integración autorizada en GitHub se utilizó para escribir código y revisar ejecuciones. La aplicación que visita un usuario no incluye esa integración ni solicita acceso a su cuenta. Se necesita una cuenta autorizada para administrar el repositorio; no para abrir y usar la página pública."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El repositorio es público: el código y cualquier archivo que se agregue allí pueden consultarse públicamente. Seleccionar un PDF en la página no lo agrega al repositorio. Subir un PDF con el botón Add file de GitHub sería una acción diferente y sí publicaría ese archivo."
+        },
+        {
+          "kind": "paragraph",
+          "text": "GitHub Pages está disponible para repositorios públicos en GitHub Free. No se contrató Azure ni un servicio de OCR de pago para esta solución. El navegador aporta el cómputo; GitHub aporta el alojamiento. La disponibilidad está sujeta a las condiciones y límites del proveedor. Fuente: https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages"
+        }
+      ]
+    },
+    {
+      "title": "4. Herramientas y bibliotecas: para qué sirve cada una",
+      "blocks": [
+        {
+          "kind": "table",
+          "headers": [
+            "Componente y versión",
+            "Función real",
+            "Dónde trabaja"
+          ],
+          "rows": [
+            [
+              "HTML y CSS",
+              "Estructura, formularios, apariencia y adaptación a pantallas.",
+              "Navegador."
+            ],
+            [
+              "JavaScript propio",
+              "Coordina archivos, catálogo, propuestas, validaciones y descarga.",
+              "Navegador."
+            ],
+            [
+              "Edge o Chrome",
+              "Ejecuta la aplicación y permite seleccionar y descargar archivos.",
+              "Tu PC o celular."
+            ],
+            [
+              "SheetJS / xlsx 0.18.5",
+              "Lee libros Excel y CSV; convierte la columna seleccionada en catálogo.",
+              "Navegador; no necesita Excel instalado."
+            ],
+            [
+              "PDF.js / pdfjs-dist 3.11.174",
+              "Dibuja páginas y extrae texto existente del PDF.",
+              "Navegador y trabajador local."
+            ],
+            [
+              "pdf-lib 1.17.1",
+              "Carga PDF y copia páginas a documentos nuevos.",
+              "Navegador."
+            ],
+            [
+              "JSZip 3.10.1",
+              "Agrupa documentos y controles dentro de un ZIP.",
+              "Navegador."
+            ],
+            [
+              "Tesseract.js 6.0.1",
+              "Coordina reconocimiento de texto y progreso/cancelación.",
+              "Trabajador del navegador."
+            ],
+            [
+              "tesseract.js-core 6.1.2",
+              "Motor OCR compilado a WebAssembly.",
+              "Tu dispositivo."
+            ],
+            [
+              "@tesseract.js-data/spa 1.0.0",
+              "Paquete del modelo de idioma español.",
+              "Se publica como recurso estático; el motor lo usa localmente."
+            ],
+            [
+              "Web Crypto / SHA-256",
+              "Calcula huellas de originales y documentos generados.",
+              "Navegador."
+            ],
+            [
+              "Canvas",
+              "Convierte páginas en imagen para vista previa y OCR.",
+              "Navegador."
+            ],
+            [
+              "Node.js 22 y npm",
+              "Instalan paquetes y ejecutan la preparación.",
+              "Runner de GitHub Actions; no se exigen al usuario."
+            ],
+            [
+              "GitHub / Actions / Pages",
+              "Versiona, prepara, verifica y sirve la página.",
+              "Infraestructura de GitHub."
+            ],
+            [
+              "OneDrive",
+              "Puede guardar y sincronizar originales y salidas según dónde los guardes.",
+              "Fuera de la aplicación; no hay conexión automática desde la página."
+            ],
+            [
+              "Word y Excel",
+              "Abren este informe y los controles CSV/archivos de trabajo.",
+              "Según las aplicaciones disponibles en tu dispositivo."
+            ]
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "No se usa una API de ChatGPT, Azure AI, Microsoft Graph, Power Automate, base de datos remota ni servidor de procesamiento de expedientes en la versión examinada. Usar Edge, Windows u OneDrive no significa que la página tenga permisos para recorrer tu disco o sincronizar carpetas por sí sola."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Las versiones se verificaron en package-lock.json. Los paquetes se obtienen del registro npm durante la construcción, no desde un CDN externo al procesar tus PDF. La publicación incluye las copias de las bibliotecas, los trabajadores y el modelo OCR en dist/vendor."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Según los metadatos de los paquetes: pdf-lib usa MIT; JSZip permite MIT o GPL-3.0-or-later; xlsx y PDF.js usan Apache-2.0; Tesseract.js y su núcleo usan Apache-2.0; el paquete npm del español declara MIT. La licencia del envoltorio del modelo no sustituye la revisión de las condiciones de sus datos originales si se redistribuye. build.cjs copia los avisos de licencia de las bibliotecas que enumera."
+        }
+      ]
+    },
+    {
+      "title": "5. De dónde salió el OCR y cómo reconoce los textos",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "OCR significa Optical Character Recognition: reconocimiento óptico de caracteres. Un escaneo suele ser una imagen; el OCR interpreta sus píxeles y produce texto. No convierte esa lectura en una clasificación jurídica ni garantiza que una cifra o nombre esté bien reconocido."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Se integró Tesseract.js, un proyecto de código abierto mantenido por terceros: https://github.com/naptha/tesseract.js . Utiliza un motor Tesseract compilado para navegador mediante WebAssembly. No se escribió desde cero ese motor ni se entrenó un modelo con tus expedientes."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El modelo español procede del paquete npm @tesseract.js-data/spa 1.0.0: https://www.npmjs.com/package/@tesseract.js-data/spa . El archivo usado se distribuye en su ruta 4.0.0/spa.traineddata.gz y se copia a vendor/ocr/lang/spa.traineddata.gz. El nombre spa indica español. Los modelos de idioma Tesseract pueden consultarse en https://github.com/tesseract-ocr/tessdata ."
+        },
+        {
+          "kind": "steps",
+          "items": [
+            "PDF.js obtiene la página y la dibuja en un Canvas con fondo blanco.",
+            "Se limita la imagen a una escala máxima de 2,5, un ancho objetivo máximo de 1800 píxeles y unos 3,5 millones de píxeles. Esto reduce el consumo de memoria.",
+            "Tesseract.createWorker('spa', 1, ...) prepara un trabajador con el idioma español y el motor LSTM.",
+            "workerPath, corePath y langPath apuntan a rutas locales del propio sitio. workerBlobURL se establece en false y cacheMethod en 'none'.",
+            "El trabajador reconoce la imagen y devuelve texto y una puntuación de confianza del motor.",
+            "El resultado se conserva en un Map de memoria durante la sesión. Puedes corregirlo; la corrección no cambia el PDF original.",
+            "Al finalizar o cancelar el reconocimiento se termina el trabajador. El OCR se ejecuta una página a la vez."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "El botón de OCR permite reconocer una página concreta. El análisis automático también puede usarlo, si marcas esa opción, cuando la extracción normal obtiene menos de 120 caracteres distintos de espacios. Así se evita reconocer innecesariamente un PDF que ya tiene suficiente texto."
+        },
+        {
+          "kind": "paragraph",
+          "text": "La puntuación de confianza no es una probabilidad de que todo el documento sea correcto. Deben revisarse cédulas, radicados, fechas, valores y nombres. Escaneos borrosos, girados, escritura manual, sellos, tablas o letra pequeña pueden producir errores."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El resultado se usa para sugerir tipos del catálogo y apoyar la propuesta de cortes. El OCR no reemplaza la firma ni la imagen probatoria del original, y esta aplicación no incorpora automáticamente una nueva capa de texto buscable dentro del PDF generado."
+        }
+      ]
+    },
+    {
+      "title": "6. Manual de uso paso a paso",
+      "blocks": [
+        {
+          "kind": "steps",
+          "items": [
+            "Abrir https://deivy199130-arch.github.io/foncep-organizador/ en Edge o Chrome. No se pide cuenta de ChatGPT. La conexión sirve para cargar la aplicación y sus recursos.",
+            "Opcionalmente ejecutar la prueba ficticia. Carga tres páginas de ejemplo y dos tipos documentales; debe proponer un documento en páginas 1–2 y otro en página 3. Esta prueba no es un expediente real.",
+            "Cargar el catálogo oficial Excel o CSV. Elegir la hoja, la columna que contiene los nombres y la primera fila de datos. Revisar la lista antes de aplicar.",
+            "Cargar uno o varios PDF desde el selector del dispositivo. Si proceden de OneDrive, puede ser necesario descargarlos mediante el selector; esa descarga corresponde a OneDrive.",
+            "Elegir el expediente activo y navegar sus páginas. Verificar si existe texto extraíble o si necesita reconocimiento OCR.",
+            "Para una página escaneada, pulsar Reconocer texto de esta página. Esperar, revisar el texto y, si es necesario, corregirlo y guardar la corrección de la sesión.",
+            "Para obtener propuestas, elegir este expediente o todos los cargados. Activar el uso de OCR si corresponde. Una llave conocida solo se admite para el expediente actual; no debe aplicarse indistintamente a todos.",
+            "Pulsar Analizar y proponer documentos. Esperar a que termine. Leer cada motivo, evidencia y alerta. No existe aprobación automática.",
+            "Si se necesita un corte distinto, añadir un documento manualmente o editar la propuesta: llave, tipo, primera y última página, consecutivo y observación.",
+            "Abrir la página inicial y verificar también el cierre de la actuación. Confirmar que las páginas pertenecen a ese ciudadano y entidad; completar o corregir la llave.",
+            "Marcar Documento revisado y aprobado en cada fila correcta. Si cambias un dato después, la aprobación se desactiva para que revises nuevamente.",
+            "Guardar el plan JSON si necesitas continuar luego. El plan no contiene los PDF; conserva los originales y el catálogo. Para recuperarlo, vuelve a cargarlos y revisa nuevamente.",
+            "Confirmar la revisión final y generar el ZIP. Si aparecen páginas omitidas o repetidas, comprobar si son intencionales antes de continuar.",
+            "Tocar el enlace Descargar FONCEP-organizados.zip. Descomprimirlo en una carpeta de trabajo, revisar los PDF y abrir los CSV de control.",
+            "Guardar el resultado donde corresponda. Si el destino está dentro de OneDrive, su cliente puede sincronizarlo. Conservar separadamente los originales."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "Los límites codificados son: catálogo hasta 8 MB; hasta 1500 nombres de tipos; PDF hasta 40 MB por archivo, 80 MB acumulados por lote y 1500 páginas por archivo; plan de recuperación hasta 2 MB y 3000 filas. Son límites preventivos, no garantías de rendimiento: un celular puede requerir lotes bastante menores."
+        }
+      ]
+    },
+    {
+      "title": "7. Cómo decide los cortes, los tipos y las llaves",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "analyze.js aplica reglas de texto. Reconoce encabezados de resolución, consulta, aceptación, objeción, certificación, cuenta de cobro, liquidación, título, notificación e historia laboral. Utiliza preferentemente la zona superior de cada página; en OCR usa las primeras líneas reconocidas."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Propone un nuevo grupo al detectar un encabezado que cambia de clase o un número de actuación diferente. Intenta conservar unidas las continuaciones, páginas numeradas y anexos. No corta simplemente porque encuentre en el cuerpo una referencia a otra resolución."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Para asignar tipo documental compara las palabras del encabezado y del texto con los nombres disponibles en el catálogo. Solo propone un nombre de ese catálogo; cuando varios candidatos tienen resultados similares o no hay señal suficiente, deja el tipo pendiente."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Para la llave busca cédulas explícitamente rotuladas y entidades rotuladas como concurrente, cuotapartista o deudora. Si hay una sola persona y una sola entidad identificables, propone CEDULA_ENTIDAD. Si faltan datos claros o existen varias alternativas, exige completar la llave. Puede reutilizar un dato único del expediente, pero registra una advertencia para verificarlo."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Esto significa que el formato sugerido de llave debe cotejarse con la llave institucional que uses. No se conectó una base maestra de ciudadanos o entidades, ni se incorporó el correo de instrucciones como una regla legal automática. La página no conoce por sí sola todas las particularidades del catálogo real."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El consecutivo identifica archivos del mismo destino y evita sobrescribir nombres repetidos. core.js valida caracteres prohibidos y nombres reservados de Windows, rangos y duplicados incluso cuando cambia la combinación de mayúsculas/minúsculas. El nombre de llave y el de tipo no pueden superar 120 caracteres cada uno."
+        }
+      ]
+    },
+    {
+      "title": "8. Qué archivos entrega y para qué sirve cada control",
+      "blocks": [
+        {
+          "kind": "table",
+          "headers": [
+            "Salida",
+            "Contenido",
+            "Uso"
+          ],
+          "rows": [
+            [
+              "Llave/TipoDocumental_001.pdf",
+              "Páginas aprobadas copiadas desde el original.",
+              "Documento renombrado y ubicado por llave."
+            ],
+            [
+              "Trazabilidad.csv",
+              "Origen, huellas SHA-256, llave, tipo, rango y destino.",
+              "Relacionar cada salida con su original."
+            ],
+            [
+              "Propuestas.csv",
+              "Todas las filas, aprobación, motivos, evidencia y alertas.",
+              "Conocer lo propuesto y lo revisado."
+            ],
+            [
+              "ControlPaginas.csv",
+              "Páginas omitidas y repetidas por PDF.",
+              "Revisar cobertura; no prueba por sí solo la clasificación."
+            ],
+            [
+              "Pendientes.csv",
+              "Filas todavía no aprobadas.",
+              "Controlar lo que falta completar."
+            ],
+            [
+              "Inventario.csv",
+              "Nombre, páginas, tamaño y SHA-256 de cada original.",
+              "Identificar el lote utilizado."
+            ],
+            [
+              "CatalogoUsado.csv",
+              "Nombres de tipos aplicados en la sesión.",
+              "Dejar constancia del catálogo usado."
+            ],
+            [
+              "TextoOCR.csv",
+              "Texto reconocido, texto corregido y confianza, si hubo OCR.",
+              "Transcripción auxiliar que puede contener datos personales."
+            ],
+            [
+              "LEEME.txt",
+              "Avisos sobre derivados, originales y revisión.",
+              "Recordar límites del resultado."
+            ],
+            [
+              "Plan-FONCEP.json",
+              "Plan, nombres, huellas y metadatos; no incluye los PDF.",
+              "Continuar el trabajo con los mismos originales."
+            ]
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "Ejemplo ficticio: 12345678_ENTIDAD_DEMO/Resolución de reconocimiento_001.pdf. Las carpetas se forman dentro del ZIP; la página no crea por sí sola subcarpetas en tu disco antes de que descargues y extraigas el paquete."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Los PDF de salida son documentos nuevos. La extracción de páginas no conserva la validez de firmas digitales del original. Mantén el archivo firmado original y su trazabilidad. La huella SHA-256 ayuda a comparar bytes, pero no reemplaza una firma, certificación ni cadena de custodia."
+        }
+      ]
+    },
+    {
+      "title": "9. Qué ocurre con la información que seleccionas en la página",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Respuesta principal: en la versión examinada, seleccionar un PDF o catálogo hace que el navegador lea el archivo en memoria. No existe una operación del código propio que lo envíe a GitHub, ChatGPT, un proveedor OCR o una base de datos. Aquí «cargar» significa cargar en la sesión del navegador, no subir un expediente a un servidor."
+        },
+        {
+          "kind": "table",
+          "headers": [
+            "Momento",
+            "Dónde está la información",
+            "Qué sale a la red"
+          ],
+          "rows": [
+            [
+              "Abrir la página",
+              "GitHub entrega código público y recursos al navegador.",
+              "Solicitudes de la página y recursos; no el contenido de expedientes."
+            ],
+            [
+              "Seleccionar PDF/Excel",
+              "Archivos originales en su ubicación y copia en memoria de la pestaña.",
+              "La aplicación no envía su contenido. Un selector de nube puede descargarlo desde su proveedor."
+            ],
+            [
+              "Extraer texto o ejecutar OCR",
+              "Memoria de JavaScript, Canvas y trabajador local.",
+              "Puede descargarse el motor o modelo del mismo sitio; no se transmite la imagen para reconocerla."
+            ],
+            [
+              "Revisar propuestas",
+              "Memoria de la pestaña.",
+              "No hay envío de filas o decisiones desde el código propio."
+            ],
+            [
+              "Guardar un plan",
+              "JSON descargado al dispositivo.",
+              "Solo se sincroniza si otro servicio o destino lo hace."
+            ],
+            [
+              "Generar ZIP",
+              "Blob local y descarga al dispositivo.",
+              "No se sube el ZIP mediante la aplicación."
+            ],
+            [
+              "Cerrar o recargar",
+              "El estado de la sesión deja de estar disponible normalmente.",
+              "Los originales y descargas permanecen donde los guardaste."
+            ]
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "GitHub sí registra la dirección IP de las visitas a Pages para fines de seguridad, incluso sin iniciar sesión. Eso es distinto de recibir el contenido de un PDF seleccionado. La política del proveedor explica otras categorías de datos de uso según el servicio. Fuentes: https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages y https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement ."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El código propio revisado no incorpora analítica, publicidad, fetch de documentos, XMLHttpRequest, sendBeacon, WebSocket, localStorage, sessionStorage, IndexedDB ni service worker. Tesseract se configura con cacheMethod:'none'. El navegador puede conservar en caché HTTP el código y el modelo públicos; no es una promesa de borrado físico de memoria ni una auditoría de todas las bibliotecas y del sistema operativo."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El Map llamado ocrCache conserva texto OCR dentro de la sesión; no es una carpeta de archivos ni almacenamiento permanente de la aplicación. Los bytes de PDF, las imágenes de página y el libro Excel también se conservan en la memoria de trabajo mientras hacen falta."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El plan JSON puede contener nombres de archivos, llaves, tipos, observaciones, evidencias de texto y huellas. No exporta los PDF ni la caché OCR como tal. El ZIP sí puede incluir TextoOCR.csv, además de identificadores y observaciones de los demás CSV. Por tanto, planes, ZIP y controles deben tratarse según la sensibilidad de sus contenidos."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Quitar un PDF destruye su visor y elimina sus filas, pero el código no purga expresamente todas sus entradas de ocrCache. Para cerrar un lote, guarda lo necesario y recarga o cierra la pestaña. Eso termina normalmente la sesión de trabajo; no garantiza borrado forense del dispositivo. Elimina aparte las descargas que no debas conservar."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Los enlaces locales de descarga se construyen con URL.createObjectURL y se revocan después de diez minutos. Son referencias Blob del navegador, no enlaces públicos alojados en GitHub. Revocarlos no borra un archivo que ya hayas descargado."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Si guardas originales o resultados en OneDrive, pueden sincronizarse conforme a la configuración de OneDrive. Si compartes un ZIP, un plan o una captura con otra persona, esa acción transmite datos fuera de la página. Si envías esos archivos a este chat, también es una acción distinta del uso de la aplicación independiente."
+        },
+        {
+          "kind": "paragraph",
+          "text": "La afirmación de procesamiento local corresponde a la versión identificada en este informe. Cambios futuros, extensiones del navegador, software del dispositivo o modificaciones maliciosas podrían cambiar el riesgo. No se ha demostrado aquí borrado seguro, aislamiento completo ni cumplimiento normativo institucional."
+        }
+      ]
+    },
+    {
+      "title": "10. Cómo comprobar por tu cuenta el tratamiento de datos",
+      "blocks": [
+        {
+          "kind": "steps",
+          "items": [
+            "En un PC, abrir la aplicación y usar F12 para abrir las herramientas de desarrollador de Edge o Chrome.",
+            "Seleccionar Network/Red y activar Preserve log/Conservar registro. Limpiar la lista antes de la prueba.",
+            "Recargar la página: deben aparecer solicitudes de HTML, CSS, JavaScript, trabajador PDF, motor OCR y modelo español cuando se necesiten.",
+            "Utilizar el expediente ficticio o un archivo sin datos sensibles y ejecutar OCR y generación. Revisar si aparecen solicitudes de envío de contenido, como POST con PDF, Excel, imágenes o textos.",
+            "Inspeccionar destino, método y contenido de cada solicitud inesperada. Una descarga GET de spa.traineddata.gz no equivale a enviar la página que se está reconociendo.",
+            "Consultar Application/Aplicación para examinar almacenamiento del sitio y trabajadores. Comparar lo observado con lo descrito en este informe.",
+            "Volver a revisar el código de la versión desplegada si alguien modifica el repositorio; una revisión del código anterior no valida automáticamente una actualización."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "Esta es una guía de comprobación para el usuario; no se afirma que se haya ejecutado una captura de tráfico de red en tu celular o con tus expedientes reales. Las comprobaciones realizadas durante la publicación fueron de construcción, sintaxis, presencia de recursos y resultado del despliegue."
+        }
+      ]
+    },
+    {
+      "title": "11. Pruebas realizadas, resultados y límites",
+      "blocks": [
+        {
+          "kind": "bullets",
+          "items": [
+            "La versión de trabajo anterior contó con pruebas sintéticas de organización, OCR y análisis, según los registros de preparación. No se trasladó esa batería completa a la distribución migrada.",
+            "En GitHub, npm install durante la migración y npm ci en la publicación terminaron correctamente. package-lock.json fija las versiones resueltas.",
+            "build.cjs generó las bibliotecas de lectura de PDF/Excel, ZIP, OCR, sus trabajadores, archivos WASM y modelo español.",
+            "verify.cjs comprobó que los cuatro archivos JavaScript propios compilan como scripts, que la página contiene sus referencias y que existen recursos OCR/PDF con tamaño mínimo.",
+            "Se revisaron las fuentes propias para explicar el tratamiento local, el guardado de planes y las rutas del OCR. Esa revisión no equivale a auditar exhaustivamente dependencias externas.",
+            "La tarea build y la tarea deploy de la ejecución 38093922198 finalizaron con success después de habilitar Pages.",
+            "No se verificó aquí la exactitud archivística de los cortes sobre el lote real, ni el funcionamiento interactivo completo en tu modelo de celular.",
+            "La herramienta de consulta web no permitió abrir la URL pública durante esa comprobación; la evidencia de publicación utilizada fue el despliegue exitoso de GitHub. No se presenta esa limitación como una prueba de fallo del sitio."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "Conviene comenzar con el ejemplo ficticio y luego con un expediente pequeño. Comprobar resultados antes de aumentar el lote evita convertir una sugerencia OCR o un corte dudoso en un archivo aprobado."
+        }
+      ]
+    },
+    {
+      "title": "12. Mantenimiento y continuidad sin ChatGPT",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Para usar la aplicación basta abrir la URL. Para mantenerla se necesita acceso autorizado al repositorio y conocimiento básico de sus archivos; puede hacerlo cualquier desarrollador. La herramienta no depende de que este chat siga abierto."
+        },
+        {
+          "kind": "steps",
+          "items": [
+            "Conservar el repositorio, la URL y una copia del código. El botón Code → Download ZIP permite obtener una copia de las fuentes.",
+            "Si se desea trabajar localmente, instalar Node.js 22 en el equipo de desarrollo, ejecutar npm ci --ignore-scripts, npm run build y npm test, y servir dist por HTTP. Estos comandos son para quien mantiene el código, no para el usuario del sitio.",
+            "Revisar un cambio antes de incorporarlo a main. Los cambios en esa rama disparan la publicación según el flujo actual.",
+            "Consultar Actions para comprobar que build y deploy han pasado. Si fallan, leer el paso concreto antes de reejecutar.",
+            "Para recuperar una versión, usar el historial y restaurar los archivos adecuados mediante un nuevo commit. No basta con cambiar un favorito del navegador.",
+            "Actualizar dependencias después de revisar compatibilidad, avisos de seguridad y licencias. Fijar versiones hace repetible una construcción; no certifica que estén libres de vulnerabilidades.",
+            "Mantener los expedientes fuera del repositorio público y no colocar datos personales en ejemplos, incidencias, capturas o registros de tareas."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "No existe sincronización automática de la carpeta OneDrive_1_0-10-2026 desde la página. La selección, descarga y extracción son acciones del usuario. Tampoco hay procesamiento continuo en segundo plano: el celular puede detener una pestaña por memoria o batería, y la aplicación no garantiza continuar después de cerrarla."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Un uso sin internet o como aplicación instalada requeriría comprobar un paquete local y su forma de servir recursos. La página actual no tiene service worker ni una garantía de funcionamiento desconectado."
+        }
+      ]
+    },
+    {
+      "title": "13. Mapa del código y explicación de cada archivo",
+      "blocks": [
+        {
+          "kind": "table",
+          "headers": [
+            "Archivo",
+            "Responsabilidad",
+            "Puntos principales"
+          ],
+          "rows": [
+            [
+              "dist/index.html",
+              "Estructura de la página.",
+              "Campos, botones, visor, mensajes y referencias a bibliotecas locales."
+            ],
+            [
+              "dist/styles.css",
+              "Presentación.",
+              "Colores, tarjetas, controles, avisos y adaptación de pantalla."
+            ],
+            [
+              "dist/app.js",
+              "Coordinación de la aplicación.",
+              "Estado, catálogo, carga PDF, visor, OCR, propuestas, plan y ZIP."
+            ],
+            [
+              "dist/core.js",
+              "Reglas de integridad de salida.",
+              "safeName, validate, coverage y csv."
+            ],
+            [
+              "dist/ocr.js",
+              "Control y sugerencias OCR.",
+              "controller, cancelación, terminación de worker y suggestions."
+            ],
+            [
+              "dist/analyze.js",
+              "Propuestas de organización.",
+              "normalize, identity, heading, rankTypes y propose."
+            ],
+            [
+              "build.cjs",
+              "Preparación de distribución.",
+              "Copia archivos npm a vendor y crea .nojekyll."
+            ],
+            [
+              "verify.cjs",
+              "Verificación de distribución.",
+              "Sintaxis, referencias y presencia mínima de recursos."
+            ],
+            [
+              "package.json",
+              "Configuración npm.",
+              "Dependencias directas y comandos build/test."
+            ],
+            [
+              "package-lock.json",
+              "Dependencias exactas.",
+              "Árbol resuelto e integridad; generado, no escrito a mano."
+            ],
+            [
+              ".github/workflows/pages.yml",
+              "Publicación.",
+              "Obtiene fuentes, prepara, verifica y despliega."
+            ],
+            [
+              ".gitignore",
+              "Exclusiones de código.",
+              "Evita versionar node_modules y vendor generado."
+            ],
+            [
+              "README.md",
+              "Guía del repositorio.",
+              "Uso, publicación y desarrollo."
+            ],
+            [
+              "Flujo import.yml histórico",
+              "Migración temporal ya eliminada.",
+              "Recuperó una sola vez las fuentes; no se ejecuta al usar la página."
+            ]
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "En core.js, csv incluye BOM, separador punto y coma y escape de comillas, y antepone un apóstrofo a valores que empiezan por =, +, @ o -. Es una mitigación para evitar que ciertos valores se interpreten como fórmulas en hojas de cálculo; no constituye una garantía general frente a cualquier importador."
+        },
+        {
+          "kind": "paragraph",
+          "text": "En app.js, task coordina operaciones para no ejecutarlas a la vez; addPDF conserva el original; renderPage dibuja; readAnalysisPage obtiene texto u OCR; el controlador de download crea los PDF derivados y el ZIP. Los manejadores enlazan los botones de index.html con esas funciones."
+        },
+        {
+          "kind": "paragraph",
+          "text": "El código del anexo se toma de Git mediante el identificador de versión fijado, no de la memoria de una explicación. Los prefijos de número de línea añadidos en Word sirven para lectura y deben retirarse si se copia un archivo para ejecutarlo."
+        }
+      ]
+    },
+    {
+      "title": "14. Glosario breve",
+      "blocks": [
+        {
+          "kind": "table",
+          "headers": [
+            "Término",
+            "Significado"
+          ],
+          "rows": [
+            [
+              "OCR",
+              "Reconocimiento óptico de caracteres: leer texto contenido en imágenes."
+            ],
+            [
+              "Llave",
+              "Identificador usado para agrupar ciudadano y entidad; debe validarse contra el formato institucional."
+            ],
+            [
+              "Tipo documental",
+              "Nombre del catálogo que clasifica una actuación."
+            ],
+            [
+              "Frontend",
+              "Código de interfaz y procesamiento que se ejecuta en el navegador."
+            ],
+            [
+              "Backend",
+              "Servidor que recibiría y procesaría datos; no existe uno de expedientes en esta versión."
+            ],
+            [
+              "WebAssembly / WASM",
+              "Formato ejecutable del motor OCR dentro del navegador."
+            ],
+            [
+              "Worker",
+              "Proceso de trabajo del navegador para tareas como OCR o lectura PDF."
+            ],
+            [
+              "Blob",
+              "Objeto de bytes local utilizado para generar descargas."
+            ],
+            [
+              "SHA-256",
+              "Huella calculada sobre bytes para comparar archivos."
+            ],
+            [
+              "JSON",
+              "Formato de texto estructurado usado para guardar el plan."
+            ],
+            [
+              "CSV",
+              "Tabla de texto que puede abrirse en Excel."
+            ],
+            [
+              "ZIP",
+              "Paquete que agrupa archivos y subcarpetas."
+            ],
+            [
+              "Dependencia",
+              "Biblioteca externa usada por la aplicación."
+            ],
+            [
+              "npm",
+              "Registro y herramienta para instalar paquetes JavaScript."
+            ],
+            [
+              "Sitio estático",
+              "Página servida como archivos; puede ejecutar funciones complejas en el navegador."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "15. Fuentes y enlaces para contrastar la explicación",
+      "blocks": [
+        {
+          "kind": "bullets",
+          "items": [
+            "Aplicación: https://deivy199130-arch.github.io/foncep-organizador/",
+            "Fuentes de la versión documentada: https://github.com/deivy199130-arch/foncep-organizador/tree/56c3d3351c05dec873ad03a79229c55810fc8af2",
+            "Publicación comprobada: https://github.com/deivy199130-arch/foncep-organizador/actions/runs/38093922198",
+            "GitHub Pages y registro de IP: https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages",
+            "Privacidad de GitHub: https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",
+            "Motor Tesseract.js: https://github.com/naptha/tesseract.js",
+            "Modelos Tesseract: https://github.com/tesseract-ocr/tessdata",
+            "Modelo npm español: https://www.npmjs.com/package/@tesseract.js-data/spa",
+            "PDF.js: https://github.com/mozilla/pdf.js",
+            "pdf-lib: https://github.com/Hopding/pdf-lib",
+            "JSZip: https://github.com/Stuk/jszip",
+            "SheetJS: https://docs.sheetjs.com/"
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "Las explicaciones de comportamiento de la aplicación se basan principalmente en sus fuentes y archivo de dependencias. Las referencias externas identifican proveedores y proyectos; no sustituyen la revisión de esta versión concreta."
+        }
+      ]
+    }
+  ]
+}

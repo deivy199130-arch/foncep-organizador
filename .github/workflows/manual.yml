@@ -1,0 +1,39 @@
+name: Generar manual Word
+on:
+  push:
+    paths:
+      - 'docs/manual-data.json'
+      - 'scripts/generate_manual.py'
+      - '.github/workflows/manual.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: manual-word
+  cancel-in-progress: false
+jobs:
+  document:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install python-docx==1.2.0
+      - name: Crear Word y verificar código completo
+        run: python scripts/generate_manual.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Manual-FONCEP-Word
+          path: |
+            docs/FONCEP_Manual_tecnico_y_codigo.docx
+            docs/manual-integrity.json
+      - name: Guardar Word descargable en el repositorio
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/FONCEP_Manual_tecnico_y_codigo.docx docs/manual-integrity.json
+          git diff --cached --quiet || git commit -m 'Agregar manual Word y anexo completo de código verificado'
+          git push
