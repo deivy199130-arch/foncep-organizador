@@ -1,0 +1,46 @@
+name: Preparar Word para OneDrive
+on:
+  push:
+    paths: ['.github/workflows/export-word.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preparar contenido DOCX sin modificarlo
+        shell: python
+        env:
+          DOCX_PACKAGE_DIR: ${{ runner.temp }}/foncep-word-package
+        run: |
+          import os, hashlib, json, zipfile
+          from pathlib import Path
+          from xml.etree import ElementTree as ET
+          source = Path('docs/FONCEP_Manual_tecnico_y_codigo.docx')
+          integrity = json.loads(Path('docs/manual-integrity.json').read_text())
+          assert hashlib.sha256(source.read_bytes()).hexdigest() == integrity['docx_sha256']
+          destination = Path(os.environ['DOCX_PACKAGE_DIR'])
+          destination.mkdir()
+          with zipfile.ZipFile(source) as archive:
+              assert archive.testzip() is None
+              archive.extractall(destination)
+              for name in archive.namelist():
+                  if name.endswith('.xml') or name.endswith('.rels'):
+                      ET.fromstring(archive.read(name))
+                  assert (destination / name).read_bytes() == archive.read(name)
+          assert (destination / '[Content_Types].xml').exists()
+          assert (destination / '_rels/.rels').exists()
+          assert (destination / 'word/document.xml').exists()
+          print('Paquete DOCX comprobado; contenido idéntico al Word final.')
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Word-FONCEP-para-OneDrive
+          path: ${{ runner.temp }}/foncep-word-package/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
