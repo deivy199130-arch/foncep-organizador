@@ -18,7 +18,7 @@ DATA = json.loads((ROOT / "docs/manual-data.json").read_text(encoding="utf-8"))
 SOURCE = DATA["source_commit"]
 FILES = [
     "dist/index.html", "dist/styles.css", "dist/app.js", "dist/core.js",
-    "dist/ocr.js", "dist/analyze.js", "build.cjs", "verify.cjs",
+    "dist/ocr.js", "dist/analyze.js", "dist/catalog.js", "build.cjs", "verify.cjs",
     "package.json", ".github/workflows/pages.yml", ".gitignore",
     "README.md", "package-lock.json",
 ]

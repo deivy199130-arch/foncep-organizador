@@ -2,7 +2,7 @@
   "title": "Organizador documental FONCEP",
   "subtitle": "Informe de implementación, guía de uso, privacidad y código completo",
   "date": "10 de octubre de 2026",
-  "source_commit": "56c3d3351c05dec873ad03a79229c55810fc8af2",
+  "source_commit": "d833fd8f00ea7bc127f380df4452c00ff74f2792",
   "chapters": [
     {
       "title": "1. Qué se construyó y qué versión documenta este informe",
@@ -13,11 +13,15 @@
         },
         {
           "kind": "paragraph",
-          "text": "Aplicación: https://deivy199130-arch.github.io/foncep-organizador/ . Repositorio: https://github.com/deivy199130-arch/foncep-organizador . Fecha de elaboración: 10 de octubre de 2026. Versión de código examinada: 56c3d3351c05dec873ad03a79229c55810fc8af2."
+          "text": "Aplicación: https://deivy199130-arch.github.io/foncep-organizador/ . Repositorio: https://github.com/deivy199130-arch/foncep-organizador . Fecha de elaboración: 10 de octubre de 2026. Versión de código examinada: d833fd8f00ea7bc127f380df4452c00ff74f2792."
         },
         {
           "kind": "paragraph",
           "text": "El informe distingue las actuaciones realizadas, las funciones presentes en el código y las comprobaciones efectivamente ejecutadas. No equivale a una certificación de seguridad ni a una auditoría archivística o jurídica. Tampoco implica que ya se hayan organizado todos los expedientes reales de la carpeta original."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Actualización del catálogo integrado: la aplicación abre con los 19 tipos de Tipos_Documentales_Cuotas_Partes_Escalamiento.xlsx, versión del 9 de octubre de 2026. Se conservaron exactamente los códigos y descripciones del archivo encontrado en la carpeta de trabajo. Solo se incorporó la lista de tipos, no expedientes, el correo ni el libro completo."
         },
         {
           "kind": "paragraph",
@@ -51,7 +55,8 @@
             "Eliminar el flujo temporal de importación. Las publicaciones posteriores usan los archivos propios del repositorio y los paquetes fijados en package-lock.json.",
             "Intentar habilitar GitHub Pages automáticamente. GitHub rechazó esa habilitación por permisos de la integración; por eso seleccionaste GitHub Actions como fuente en Settings → Pages.",
             "Reejecutar la tarea fallida después de tu confirmación. La compilación, las verificaciones y el despliegue terminaron con resultado success. El registro de publicación es https://github.com/deivy199130-arch/foncep-organizador/actions/runs/38093922198 .",
-            "Preparar este informe y su anexo completo de código a partir de la versión fijada, para que la explicación pueda contrastarse con los archivos reales."
+            "Preparar este informe y su anexo completo de código a partir de la versión fijada, para que la explicación pueda contrastarse con los archivos reales.",
+            "Incorporar como predeterminados los 19 tipos documentales del Excel indicado por el usuario. Crear catalog.js, mostrar código y descripción, iniciar el catálogo al abrir, conservar el reemplazo opcional por Excel/CSV y añadir Restaurar catálogo incluido. Eliminar del HTML un fragmento de desafío del alojamiento anterior que llegó con la migración; no forma parte de la aplicación."
           ]
         },
         {
@@ -136,6 +141,10 @@
         {
           "kind": "paragraph",
           "text": "GitHub Pages está disponible para repositorios públicos en GitHub Free. No se contrató Azure ni un servicio de OCR de pago para esta solución. El navegador aporta el cómputo; GitHub aporta el alojamiento. La disponibilidad está sujeta a las condiciones y límites del proveedor. Fuente: https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages"
+        },
+        {
+          "kind": "paragraph",
+          "text": "catalog.js contiene únicamente los nombres y códigos de los tipos documentales y se publica junto al resto del código. Ese catálogo queda visible al ser el sitio y repositorio públicos; no se incorporan datos de ciudadanos ni expedientes. No se requiere conexión con OneDrive para obtenerlo en cada sesión."
         }
       ]
     },
@@ -295,16 +304,16 @@
           "items": [
             "Abrir https://deivy199130-arch.github.io/foncep-organizador/ en Edge o Chrome. No se pide cuenta de ChatGPT. La conexión sirve para cargar la aplicación y sus recursos.",
             "Opcionalmente ejecutar la prueba ficticia. Carga tres páginas de ejemplo y dos tipos documentales; debe proponer un documento en páginas 1–2 y otro en página 3. Esta prueba no es un expediente real.",
-            "Cargar el catálogo oficial Excel o CSV. Elegir la hoja, la columna que contiene los nombres y la primera fila de datos. Revisar la lista antes de aplicar.",
+            "El catálogo incluido ya está activo con 19 tipos documentales. Desplegar la lista para revisar códigos y descripciones. No necesitas cargar ningún Excel para utilizar esos tipos. Solo si cambia el catálogo, abrir Usar otro catálogo (opcional), seleccionar Excel/CSV, hoja, columna y primera fila, y aplicar.",
             "Cargar uno o varios PDF desde el selector del dispositivo. Si proceden de OneDrive, puede ser necesario descargarlos mediante el selector; esa descarga corresponde a OneDrive.",
-            "Elegir el expediente activo y navegar sus páginas. Verificar si existe texto extraíble o si necesita reconocimiento OCR.",
+            "Elegir el expediente activo y navegar sus páginas. Verificar si existe texto extraíble o si necesita reconocimiento OCR. Puedes restaurar el catálogo oficial con Restaurar catálogo incluido; este cambio exige revisar de nuevo las aprobaciones.",
             "Para una página escaneada, pulsar Reconocer texto de esta página. Esperar, revisar el texto y, si es necesario, corregirlo y guardar la corrección de la sesión.",
             "Para obtener propuestas, elegir este expediente o todos los cargados. Activar el uso de OCR si corresponde. Una llave conocida solo se admite para el expediente actual; no debe aplicarse indistintamente a todos.",
             "Pulsar Analizar y proponer documentos. Esperar a que termine. Leer cada motivo, evidencia y alerta. No existe aprobación automática.",
             "Si se necesita un corte distinto, añadir un documento manualmente o editar la propuesta: llave, tipo, primera y última página, consecutivo y observación.",
             "Abrir la página inicial y verificar también el cierre de la actuación. Confirmar que las páginas pertenecen a ese ciudadano y entidad; completar o corregir la llave.",
             "Marcar Documento revisado y aprobado en cada fila correcta. Si cambias un dato después, la aprobación se desactiva para que revises nuevamente.",
-            "Guardar el plan JSON si necesitas continuar luego. El plan no contiene los PDF; conserva los originales y el catálogo. Para recuperarlo, vuelve a cargarlos y revisa nuevamente.",
+            "Guardar el plan JSON si necesitas continuar luego. El plan no contiene los PDF; conserva los originales. Para recuperarlo, vuelve a cargar los originales y usa el mismo catálogo, integrado o personalizado, con que creaste el plan; revisa y aprueba de nuevo.",
             "Confirmar la revisión final y generar el ZIP. Si aparecen páginas omitidas o repetidas, comprobar si son intencionales antes de continuar.",
             "Tocar el enlace Descargar FONCEP-organizados.zip. Descomprimirlo en una carpeta de trabajo, revisar los PDF y abrir los CSV de control.",
             "Guardar el resultado donde corresponda. Si el destino está dentro de OneDrive, su cliente puede sincronizarlo. Conservar separadamente los originales."
@@ -534,7 +543,7 @@
             "La versión de trabajo anterior contó con pruebas sintéticas de organización, OCR y análisis, según los registros de preparación. No se trasladó esa batería completa a la distribución migrada.",
             "En GitHub, npm install durante la migración y npm ci en la publicación terminaron correctamente. package-lock.json fija las versiones resueltas.",
             "build.cjs generó las bibliotecas de lectura de PDF/Excel, ZIP, OCR, sus trabajadores, archivos WASM y modelo español.",
-            "verify.cjs comprobó que los cuatro archivos JavaScript propios compilan como scripts, que la página contiene sus referencias y que existen recursos OCR/PDF con tamaño mínimo.",
+            "verify.cjs comprobó que los archivos JavaScript propios, incluido catalog.js compilan como scripts, que la página contiene sus referencias y que existen recursos OCR/PDF con tamaño mínimo.",
             "Se revisaron las fuentes propias para explicar el tratamiento local, el guardado de planes y las rutas del OCR. Esa revisión no equivale a auditar exhaustivamente dependencias externas.",
             "La tarea build y la tarea deploy de la ejecución 38093922198 finalizaron con success después de habilitar Pages.",
             "No se verificó aquí la exactitud archivística de los cortes sobre el lote real, ni el funcionamiento interactivo completo en tu modelo de celular.",
@@ -606,6 +615,11 @@
               "dist/core.js",
               "Reglas de integridad de salida.",
               "safeName, validate, coverage y csv."
+            ],
+            [
+              "dist/catalog.js",
+              "Catálogo predeterminado.",
+              "19 códigos y descripciones exactos; referencia del archivo origen y restauración desde la interfaz."
             ],
             [
               "dist/ocr.js",
@@ -754,7 +768,7 @@
           "kind": "bullets",
           "items": [
             "Aplicación: https://deivy199130-arch.github.io/foncep-organizador/",
-            "Fuentes de la versión documentada: https://github.com/deivy199130-arch/foncep-organizador/tree/56c3d3351c05dec873ad03a79229c55810fc8af2",
+            "Fuentes de la versión documentada: https://github.com/deivy199130-arch/foncep-organizador/tree/d833fd8f00ea7bc127f380df4452c00ff74f2792",
             "Publicación comprobada: https://github.com/deivy199130-arch/foncep-organizador/actions/runs/38093922198",
             "GitHub Pages y registro de IP: https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages",
             "Privacidad de GitHub: https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",

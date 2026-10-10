@@ -4,7 +4,7 @@ Aplicación web independiente, con OCR en español dentro del navegador. No requ
 
 ## Uso
 
-1. Cargar el Excel con los tipos documentales y seleccionar la hoja y columna del catálogo.
+1. Usar el catálogo incluido de 19 tipos documentales de Cuotas Partes. Solo cargar un Excel/CSV si se necesita reemplazarlo.
 2. Cargar los PDF de los expedientes.
 3. Analizar el texto y utilizar OCR para las páginas escaneadas.
 4. Revisar cada propuesta: llave, tipo documental y páginas. Aprobar las que sean correctas.
@@ -23,3 +23,7 @@ Dirección prevista: https://deivy199130-arch.github.io/foncep-organizador/
 Node.js 22. Ejecutar `npm ci --ignore-scripts`, `npm run build` y `npm test`. Servir la carpeta dist mediante HTTP. No subir expedientes ni datos personales a este repositorio público.
 
 Las verificaciones de distribución comprueban la sintaxis y los recursos necesarios. La versión original contó con pruebas sintéticas de organización y análisis; falta validar la clasificación con expedientes reales y comprobarla en el celular del usuario.
+
+## Catálogo incluido
+
+Fuente: Tipos_Documentales_Cuotas_Partes_Escalamiento.xlsx, versión del 9 de octubre de 2026. `dist/catalog.js` conserva sus 19 códigos y descripciones. Se activa al abrir y puede restaurarse desde la interfaz. Los nombres de salida usan la descripción; los códigos se muestran en la lista y en CatalogoUsado.csv. Solo se publica esta lista; no el Excel original ni expedientes.
