@@ -67,6 +67,6 @@ const remaining=state.rows.filter(r=>!ids.has(r.fileId));const used=new Set(rema
 finally{state.analyzing=false;locked.forEach(({e,disabled})=>{if(e.isConnected)e.disabled=disabled;});$('cancelAnalysis').hidden=true;$('analysisProgress').hidden=true;}
 };
 
-function restoreOfficialCatalog(){setTypes(FoncepCatalog.entries.map(e=>e.description),'Catálogo incluido');say('Catálogo incluido listo: 19 tipos documentales. Carga los PDF y revisa las propuestas.');}
+function restoreOfficialCatalog(){setTypes(FoncepCatalog.entries.map(e=>e.description),'Catálogo incluido');say('Catálogo incluido listo: '+FoncepCatalog.entries.length+' tipos documentales. Carga los PDF y revisa las propuestas.');}
 $('restoreCatalog').onclick=()=>task(async()=>{restoreOfficialCatalog();});
 restoreOfficialCatalog();

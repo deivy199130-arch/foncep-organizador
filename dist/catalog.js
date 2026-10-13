@@ -77,8 +77,9 @@ const entries=[
     "code": "SENJ",
     "description": "SENTENCIAS JUDICIALES"
   }
+  ,{"code":"RDES","description":"REGISTRO DE DEFUNCIÓN DEL SUSTITUTO"}
 ];
-const api=Object.freeze({source:'Tipos_Documentales_Cuotas_Partes_Escalamiento.xlsx',sourceSHA256:'0B3FCBAC896D6CF6290FAD65D799378D05AE881446F2C53E45B5B43190F29DEF',sourceModified:'2026-10-09',entries:Object.freeze(entries.map(Object.freeze))});
+const api=Object.freeze({source:'Tipos_Documentales_Cuotas_Partes_Escalamiento.xlsx',sourceSHA256:'0B3FCBAC896D6CF6290FAD65D799378D05AE881446F2C53E45B5B43190F29DEF',sourceModified:'2026-10-09',extensions:Object.freeze([{code:'RDES',date:'2026-10-13',reason:'Instrucción del usuario: defunción del sustituto'}]),entries:Object.freeze(entries.map(Object.freeze))});
 root.FoncepCatalog=api;
 if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);
